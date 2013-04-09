@@ -5,59 +5,57 @@
 */
 App.Views.App = Backbone.View.extend({
 	initialize: function() {
-		vent.on('contact:edit', this.editContact, this);
+		// vent.on('contact:edit', this.editContact, this);
 
-		var addContactView = new App.Views.AddContact({ collection: App.contacts });
+		var addTaskView = new App.Views.AddTask({ collection: App.task });
 
-		var allContactsView = new App.Views.Contacts({ collection: App.contacts }).render();
-		$('#allContacts').append(allContactsView.el);
+		// var allContactsView = new App.Views.Contacts({ collection: App.contacts }).render();
+		// $('#allContacts').append(allContactsView.el);
 	},
 
-	editContact: function(contact) {
-		var editContactView = new App.Views.EditContact({ model: contact });
-		$('#editContact').html(editContactView.el);
-	}
+	// editContact: function(contact) {
+	// 	var editContactView = new App.Views.EditContact({ model: contact });
+	// 	$('#editContact').html(editContactView.el);
+	// }
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| Add Contact View
+| Add Task View
 |--------------------------------------------------------------------------
 */
-App.Views.AddContact = Backbone.View.extend({
-	el: '#addContact',
+App.Views.AddTask = Backbone.View.extend({
+	el: '#addTask',
 
 	initialize: function() {
-		this.first_name = $('#first_name');
-		this.last_name = $('#last_name');
-		this.description = $('#description');
-		this.email_address = $('#email_address');
+		this.task_name = $('#name');
+		this.task_completed = 0;
+		this.task_deleted = 0;
 	},
 
 	events: {
-		'submit': 'addContact'
+		'submit': 'addTask'
 	},
 
-	addContact: function(e) {
+	addTask: function(e) {
 		e.preventDefault();
 
 		this.collection.create({
-			first_name: this.first_name.val(),
-			last_name: this.last_name.val(),
-			email_address: this.email_address.val(),
-			description: this.description.val()
+			name: this.task_name.val(),
+			completed: this.task_completed,
+			deleted: this.task_deleted
 		}, { wait: true });
 
-		this.clearForm();
-	},
-
-	clearForm: function() {
-		this.first_name.val('');
-		this.last_name.val('');
-		this.description.val('');
-		this.email_address.val('');
+		// this.clearForm();
 	}
+
+	// clearForm: function() {
+	// 	this.first_name.val('');
+	// 	this.last_name.val('');
+	// 	this.description.val('');
+	// 	this.email_address.val('');
+	// }
 });
 
 
