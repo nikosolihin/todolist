@@ -1,0 +1,15 @@
+<?php
+	$result = mysql_query($query);
+	while ( $row = mysql_fetch_object($result) ) { 
+		if ($row->completed == 'yes'){
+			echo "<div class=\"completed-task\">";
+			echo "<p class=\"task-content\">" . $row->name . "</p>";
+			echo "<p class=\"task-options\"><a class=\"btn delete-btn\" data-owner=\"" . $row->owner . "\" data-task=\"" . $row->ID . "\">Delete Task</a></p></div>";	
+		} else {
+			echo "<div class=\"task\">";
+			echo "<p class=\"task-content\">" . $row->name . "</p>";
+			echo "<p class=\"task-options\"><a class=\"btn complete-btn\" data-owner=\"" . $row->owner . "\" data-task=\"" . $row->ID . "\">Mark Completed</a>" . 
+				"<a class=\"btn delete-btn\" data-owner=\"" . $row->owner . "\" data-task=\"" . $row->ID . "\">Delete Task</a></p></div>";			
+		}
+	} 
+?> 
