@@ -1,19 +1,40 @@
-var mongodb = require('mongodb');
+// var mongodb = require('mongodb');
 
-var BSON = mongodb.BSONPure;
+// var BSON = mongodb.BSONPure;
 
-var db = new mongodb.Db('nodejitsudb7071645159', new mongodb.Server('linus.mongohq.com', 10022, {}));
+// var db = new mongodb.Db('nodejitsudb7071645159', new mongodb.Server('linus.mongohq.com', 10022, {}));
 
-db.open(function (err, db) {
-    if (err) { throw err; }
-    db.authenticate('nodejitsu', 'b9c1855daf5aa2b33ef69440c0b7cb91', function (err, replies) {
+// db.open(function (err, db) {
+//     if (err) { throw err; }
+//     db.authenticate('nodejitsu', 'b9c1855daf5aa2b33ef69440c0b7cb91', function (err, replies) {
+//         console.log("Connected to 'todosdb' database");
+//         db.collection('tasks', {safe:true}, function(err, collection) {
+//             if (err) {
+//                 console.log("The 'tasks' collection doesn't exist...");
+//             }
+//         });
+//     });
+// });
+
+
+var mongo = require('mongodb');
+
+var Server = mongo.Server,
+    Db = mongo.Db,
+    BSON = mongo.BSONPure;
+
+var server = new Server('localhost', 27017, {auto_reconnect: true});
+db = new Db('todosdb', server);
+
+db.open(function(err, db) {
+    if(!err) {
         console.log("Connected to 'todosdb' database");
-        db.collection('tasks', {safe:true}, function(err, collection) {
+        db.collection('tasks', {strict:true}, function(err, collection) {
             if (err) {
-                console.log("The 'tasks' collection doesn't exist...");
+                console.log("The 'tasks' collection doesn't exist. Creating it with sample data...");
             }
         });
-    });
+    }
 });
 
 exports.findAll = function(req, res) {
@@ -51,9 +72,9 @@ exports.addTask = function(req, res) {
 
 exports.updateTask = function(req, res) {
     var id = req.params.id;
-    var task = req.body;
+    var task = { status: req.body.status, name: req.body.name };
     console.log('Updating task: ' + id);
-    console.log(JSON.stringify(task));
+    console.log(JSON.stringify(req.body));
     db.collection('tasks', function(err, collection) {
         collection.update({'_id':new BSON.ObjectID(id)}, task, {safe:true}, function(err, result) {
             if (err) {

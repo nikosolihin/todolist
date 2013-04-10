@@ -5,18 +5,13 @@
 */
 App.Views.App = Backbone.View.extend({
 	initialize: function() {
-		// vent.on('contact:edit', this.editContact, this);
 
-		var addTaskView = new App.Views.AddTask({ collection: App.tasks });		// create add task view
+		var addTaskView = new App.Views.AddTask({ collection: App.tasks });
 
-		// var allContactsView = new App.Views.Contacts({ collection: App.contacts }).render();
-		// $('#allContacts').append(allContactsView.el);
+		var allTasksView = new App.Views.Tasks({ collection: App.tasks }).render();
+
+		$('.task-container').append(allTasksView.el);
 	}
-
-	// editContact: function(contact) {
-	// 	var editContactView = new App.Views.EditContact({ model: contact });
-	// 	$('#editContact').html(editContactView.el);
-	// }
 });
 
 
@@ -30,8 +25,7 @@ App.Views.AddTask = Backbone.View.extend({
 
 	initialize: function() {
 		this.task_name = $('#name');
-		this.task_completed = 0;
-		this.task_deleted = 0;
+		this.task_status = 'in progress';
 	},
 
 	events: {
@@ -40,135 +34,87 @@ App.Views.AddTask = Backbone.View.extend({
 
 	addTask: function(e) {
 		e.preventDefault();
-
 		this.collection.create({
 			name: this.task_name.val(),
-			completed: this.task_completed,
-			deleted: this.task_deleted
+			status: this.task_status
 		}, { wait: true });
+		this.clearForm();
+	},
 
-		console.log('submitting: '+ this.task_name.val()+this.task_completed+this.task_deleted);
-		console.log(this.collection.toJSON());
-
-		// this.clearForm();
+	clearForm: function() {
+		this.task_name.val('');
 	}
-
-	// clearForm: function() {
-	// 	this.first_name.val('');
-	// 	this.last_name.val('');
-	// 	this.description.val('');
-	// 	this.email_address.val('');
-	// }
 });
 
 
-// /*
-// |--------------------------------------------------------------------------
-// | Edit Contact View
-// |--------------------------------------------------------------------------
-// */
-// App.Views.EditContact = Backbone.View.extend({
-// 	template: template('editContactTemplate'),
-
-// 	initialize: function() {
-// 		this.render();
-
-// 		this.form = this.$('form');
-// 		this.first_name = this.form.find('#edit_first_name');
-// 		this.last_name = this.form.find('#edit_last_name');
-// 		this.description = this.form.find('#edit_description');
-// 		this.email_address = this.form.find('#edit_email_address');
-// 	},
-
-// 	events: {
-// 		'submit form': 'submit',
-// 		'click button.cancel': 'cancel'
-// 	},
-
-// 	submit: function(e) {
-// 		e.preventDefault();
-
-// 		this.model.save({
-// 			first_name: this.first_name.val(),
-// 			last_name: this.last_name.val(),
-// 			description: this.description.val(),
-// 			email_address: this.email_address.val()
-// 		});
-
-// 		this.remove();
-// 	},
-
-// 	cancel: function() {
-// 		this.remove();
-// 	},
-
-// 	render: function() {
-// 		var html = this.template( this.model.toJSON() );
-
-// 		this.$el.html(html);
-// 		return this;
-// 	}
-// });
+/*
+|--------------------------------------------------------------------------
+| All Tasks View
+|--------------------------------------------------------------------------
+*/
+App.Views.Tasks = Backbone.View.extend({
 
 
 
-// |--------------------------------------------------------------------------
-// | All Contacts View
-// |--------------------------------------------------------------------------
+	initialize: function() {
+		this.collection.on('sync', this.addOne, this);
+	},
 
-// App.Views.Contacts = Backbone.View.extend({
-// 	tagName: 'tbody',
+	render: function() {
+		this.collection.each( this.addOne, this );
+		return this;
+	},
 
-// 	initialize: function() {
-// 		this.collection.on('add', this.addOne, this);
-// 	},
+	addOne: function(task) {
+		var taskView = new App.Views.Task({ model: task });
+		this.$el.append(taskView.render().el);
+	}
+});
 
-// 	render: function() {
-// 		this.collection.each( this.addOne, this );
-// 		return this;
-// 	},
+/*
+|--------------------------------------------------------------------------
+| Single Contact View
+|--------------------------------------------------------------------------
+*/
+App.Views.Task = Backbone.View.extend({
+	className: 'task',
 
-// 	addOne: function(contact) {
-// 		var contactView = new App.Views.Contact({ model: contact });
-// 		this.$el.append(contactView.render().el);
-// 	}
-// });
+	template: template('allTasksTemplate'),
 
+	initialize: function() {
+		this.model.on('destroy', this.unrender, this);
+		this.model.on('change', this.markCompleted, this);
+	},
 
-// /*
-// |--------------------------------------------------------------------------
-// | Single Contact View
-// |--------------------------------------------------------------------------
-// */
-// App.Views.Contact = Backbone.View.extend({
-// 	tagName: 'tr',
+	events: {
+		'click a.delete': 'deleteTask',
+		'click a.complete': 'markTask'
+	},
 
-// 	template: template('allContactsTemplate'),
+	markTask: function(e) {
+		e.preventDefault();
+		this.model.save({
+			name: this.model.attributes.name,
+			status: "completed"
+		});
+	},
 
-// 	initialize: function() {
-// 		this.model.on('destroy', this.unrender, this);
-// 		this.model.on('change', this.render, this);
-// 	},
+	markCompleted: function() {
+		this.$el.attr( 'class', 'completed' );
+	},
 
-// 	events: {
-// 		'click a.delete': 'deleteContact',
-// 		'click a.edit'  : 'editContact'
-// 	},
+	deleteTask: function(e) {
+		e.preventDefault();
+		this.model.destroy();
+	},
 
-// 	editContact: function() {
-// 		vent.trigger('contact:edit', this.model);
-// 	},
+	render: function() {
+		this.$el.html( this.template( this.model.toJSON() ) );
+		return this;
+	},
 
-// 	deleteContact: function() {
-// 		this.model.destroy();
-// 	},
+	unrender: function() {
+		this.remove();
+	}
+});
 
-// 	render: function() {
-// 		this.$el.html( this.template( this.model.toJSON() ) );
-// 		return this;
-// 	},
-
-// 	unrender: function() {
-// 		this.remove();
-// 	}
-// });
