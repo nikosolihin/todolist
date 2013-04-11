@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Welcome To-Do List</title>
+	<title>Welcome to To-Do List</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link href="css/style.css" rel="stylesheet">	
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -12,7 +12,7 @@
 	<div class="task-container">	
 		<ul class="nav nav-pills">
 		  <li class="active">
-		    <a href="about.php">About</a>
+		    <a href="about.html">About</a>
 		  </li>
 		</ul>	
 		<h2 class="heading">To-Do List</h2>
@@ -20,11 +20,11 @@
 	
 	<form id="addTask" class="login">
 		<input type="text" id="name" name="name" placeholder="New Task">
-		<button type="submit" name="submit" id="add" value="List It">List It</button>
+		<button type="submit" name="submit" id="add" value="List It" class="btn list-btn">List It</button>
 	</form>		
 
+	<script id="inProgressTasksTemplate" type="text/template">
 
-	<script id="allTasksTemplate" type="text/template">
 		<p class="task-content">
 			<%= name %>
 		</p>
@@ -32,6 +32,18 @@
 			<a href="tasks/<%= _id %>" class="btn complete-btn delete">Delete</a>
 			<a href="tasks/<%= _id %>" class="btn delete-btn complete">Mark Completed</a>
 		</p>
+
+	</script>
+
+	<script id="completedTasksTemplate" type="text/template">
+
+		<p class="task-content">
+			<%= name %>
+		</p>
+		<p class="task-options">
+			<a href="tasks/<%= _id %>" class="btn complete-btn delete">Delete</a>
+		</p>
+
 	</script>
 
 	<script src="lib/jquery-1.9.1.min.js"></script>

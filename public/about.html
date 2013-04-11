@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Welcome to To-Do List</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">  
+</head>
+<body>
+	<div class="about-container">
+		<ul class="nav nav-pills">
+		  <li class="active">
+		    <a href="index.html">Back</a>
+		  </li>
+		</ul>	
+		<h2 class="heading">About To-Do List</h2>
+		<br>
+<h3>Homework 8</h3>
+
+<ul>
+<li><p><strong>What server framework are you using?</strong></p>
+
+<p>For the server I am using <em>express</em>, a web application framework for node.js.</p></li>
+<li><p><strong>Is it programmatic or template-based?</strong></p>
+
+<p><em>Express</em> is more programmatic out of the box, but there are a few template engines that can be paired with it. Furthermore, <em>express</em> makes no assumption in terms of your application structure.</p></li>
+<li><p><strong>On a scale of 1-5 (1=easy), rate the learning curve of your chosen framework.     Justify your answer.</strong></p>
+
+<p>I would say that the learning curve of <em>express</em> is 2. It is a very lean framework that provides basic RESTful routing interface out of the box.</p></li>
+<li><p><strong>On a scale of 1-5 (1=easy), rate the difficulty of converting your app to the     framework. Justify your answer.</strong></p>
+
+<p>Converting my app to the backend framework was not too difficult, 2 out of 5. However, since <em>express</em> has no notion of a database, I went through some trial and errors setting up a third-party node module to interface with my MongoDB database at nodejitsu. Additionally, since <em>express</em> has no notion of application design pattern, most of my time was spent doing the frontend logic using <a href="http://backbonejs.org/">backbone</a>.</p></li>
+<li><p><strong>Would you consider using the framework again?</strong></p>
+
+<p>Yes, I would. I like the simplistic nature of <em>express</em> and the fact that it is a RESTful framework.</p></li>
+</ul>
+
+<br>
+<h3>Homework 9</h3>
+
+<ul>
+<li><p><strong>How is your server implemented? RESTfully or Web Services?</strong></p>
+
+<p>RESTfully using <em>express</em> as described above.</p></li>
+<li><p><strong>If it’s RESTful, provide the following information:</strong></p>
+
+<ul>
+<li><p><em>Resource identification - what are the resource abstractions?</em></p>
+
+<p>The resource is <em>only</em> the tasks in the To-Do List.</p></li>
+<li><p><em>URI design - what do your URIs look like?</em></p>
+
+<pre><code>Retreive all tasks:
+GET http://cis658-todolist.nodejitsu.com/tasks
+
+Retreive task with ID#:
+GET http://cis658-todolist.nodejitsu.com/tasks/:id
+
+Creating a new tasks:
+POST http://cis658-todolist.nodejitsu.com/tasks
+
+    With request body:    
+    {
+        "name": "Study for exam"
+    }
+
+Updating the status of task with ID#:
+PUT http://cis658-todolist.nodejitsu.com/tasks/:id
+
+    With request body:    
+    {
+        "name": "Study more",
+        "status": "completed"
+    }
+
+Deleting a task with ID#:
+DELETE http://cis658-todolist.nodejitsu.com/tasks/:id
+</code></pre></li>
+<li><p><em>Interaction semantics - do all four HTTP verbs apply to all resources?</em></p>
+
+<p>Yes. GET, POST, PUT, and DELETE apply.</p></li>
+<li><p><em>Resource relationships - how are resources linked?</em></p>
+
+<p>The resources are not linked since this is a very simple application.  However, if the application has the capability of handling different users, there will be "state transfer" links/relationships between tasks and the users resource abstraction.</p></li>
+<li><p><em>Data representation - XML, JSON, etc.</em></p>
+
+<p>JSON.</p></li>
+</ul>
+</li>
+<li><p><strong>Did you use a framework? If so, which one?</strong></p>
+
+<p>Yes. <em>Express</em> as described in homework 8.</p></li>
+</ul>
+
+<br>
+<h3>Homework 10</h3>
+
+<ul>
+<li><p><strong>Which PaaS provider did you choose for your application (if it’s not obvious from   the URL)?</strong></p>
+
+<p><a href="https://www.nodejitsu.com/">NodeJitsu</a></p></li>
+<li><p><strong>What was the most challenging aspect of the transition to a cloud-based platform?</strong></p>
+
+<p>For me, it was getting node to communicate with Nodejitsu's MongoDB, but it was probably because I have not done much with MongoDB before.</p></li>
+<li><p><strong>Did your PaaS provide make writing the code any easier, for example by providing  useful utility APIs?</strong></p>
+
+<p>Although not necessarily utility API, I did find nodejitsu's CLI to be quite helpful for deploying and debugging my application.</p></li>
+</ul>
+<ul class="nav nav-pills">
+		  <li class="active"><br>
+		    <a href="index.html">Back</a>
+		  </li>
+		</ul>
+	</div>
+</body>
+</html>

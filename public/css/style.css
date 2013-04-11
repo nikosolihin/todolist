@@ -16,6 +16,21 @@ body {
 	-moz-border-radius: 5px;
 	border-radius: 5px;
 }
+.about-container {
+	max-width: 600px;
+	padding: 19px 29px 29px;
+	margin: 0 auto 20px;
+	background-color: #fff;
+	border: 1px solid #e5e5e5;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+.list-btn {
+	position: relative;
+	top: -7px;
+	right: -10px;
+}
 .login .heading {
 	margin-bottom: 10px;
 }
@@ -45,7 +60,7 @@ a#logout {
 	float: right;
 }
 .completed-task {
-	background: url(check.gif) no-repeat right top;
+	background: url(../images/check.gif) no-repeat right top;
 }
 .explanation {
 	font-size: 10px;

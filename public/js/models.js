@@ -4,7 +4,8 @@ App.Models.Task = Backbone.Model.extend({
 
 	validate: function(attrs) {
 		if ( ! attrs.name ) {
-			return 'A task name is required.';
+			alert ('Cannot submit an empty task');
+			return 'Cannot submit an empty task';
 		}
 	}
 });

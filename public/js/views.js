@@ -54,10 +54,8 @@ App.Views.AddTask = Backbone.View.extend({
 */
 App.Views.Tasks = Backbone.View.extend({
 
-
-
 	initialize: function() {
-		this.collection.on('sync', this.addOne, this);
+		this.collection.on('add', this.addOne, this);
 	},
 
 	render: function() {
@@ -66,7 +64,17 @@ App.Views.Tasks = Backbone.View.extend({
 	},
 
 	addOne: function(task) {
-		var taskView = new App.Views.Task({ model: task });
+		var template;
+		var className;
+		if (task.attributes.status == 'completed') {
+			template = 'templateCompleted';
+			className = 'completed-task';
+		} else {
+			template = 'templateInProgress';
+			className = 'task';
+		}
+
+		var taskView = new App.Views.Task({ model: task, template_selection: template, className: className });
 		this.$el.append(taskView.render().el);
 	}
 });
@@ -77,13 +85,16 @@ App.Views.Tasks = Backbone.View.extend({
 |--------------------------------------------------------------------------
 */
 App.Views.Task = Backbone.View.extend({
-	className: 'task',
 
-	template: template('allTasksTemplate'),
+	templateInProgress: template('inProgressTasksTemplate'),
 
-	initialize: function() {
+	templateCompleted: template('completedTasksTemplate'),
+
+	initialize: function(options) {
 		this.model.on('destroy', this.unrender, this);
-		this.model.on('change', this.markCompleted, this);
+		this.model.on('change', this.render, this);
+		this.template = this[options.template_selection];
+		this.className = this[options.className];
 	},
 
 	events: {
@@ -96,11 +107,10 @@ App.Views.Task = Backbone.View.extend({
 		this.model.save({
 			name: this.model.attributes.name,
 			status: "completed"
-		});
-	},
+		}, { wait: true });
+		this.template = this['templateCompleted'];
 
-	markCompleted: function() {
-		this.$el.attr( 'class', 'completed' );
+		this.$el.attr('class', 'completed-task');
 	},
 
 	deleteTask: function(e) {
