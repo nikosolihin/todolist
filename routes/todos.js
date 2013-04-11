@@ -1,40 +1,19 @@
-// var mongodb = require('mongodb');
+var mongodb = require('mongodb');
 
-// var BSON = mongodb.BSONPure;
+var BSON = mongodb.BSONPure;
 
-// var db = new mongodb.Db('nodejitsudb7071645159', new mongodb.Server('linus.mongohq.com', 10022, {}));
+var db = new mongodb.Db('nodejitsudb7071645159', new mongodb.Server('linus.mongohq.com', 10022, {}));
 
-// db.open(function (err, db) {
-//     if (err) { throw err; }
-//     db.authenticate('nodejitsu', 'b9c1855daf5aa2b33ef69440c0b7cb91', function (err, replies) {
-//         console.log("Connected to 'todosdb' database");
-//         db.collection('tasks', {safe:true}, function(err, collection) {
-//             if (err) {
-//                 console.log("The 'tasks' collection doesn't exist...");
-//             }
-//         });
-//     });
-// });
-
-
-var mongo = require('mongodb');
-
-var Server = mongo.Server,
-    Db = mongo.Db,
-    BSON = mongo.BSONPure;
-
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('todosdb', server);
-
-db.open(function(err, db) {
-    if(!err) {
+db.open(function (err, db) {
+    if (err) { throw err; }
+    db.authenticate('nodejitsu', 'b9c1855daf5aa2b33ef69440c0b7cb91', function (err, replies) {
         console.log("Connected to 'todosdb' database");
-        db.collection('tasks', {strict:true}, function(err, collection) {
+        db.collection('tasks', {safe:true}, function(err, collection) {
             if (err) {
-                console.log("The 'tasks' collection doesn't exist. Creating it with sample data...");
+                console.log("The 'tasks' collection doesn't exist...");
             }
         });
-    }
+    });
 });
 
 exports.findAll = function(req, res) {
